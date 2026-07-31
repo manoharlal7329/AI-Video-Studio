@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { jobQueue } from '../services/jobQueue';
 
-export const getJobStatus = (req: Request, res: Response) => {
+export const getJobStatus = (req: Request<{ jobId: string }>, res: Response) => {
   const { jobId } = req.params;
   
   const job = jobQueue.getJobStatus(jobId);

@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import path from 'path';
 import fs from 'fs';
 
-export const downloadVideo = (req: Request, res: Response) => {
+export const downloadVideo = (req: Request<{ jobId: string }>, res: Response) => {
   const { jobId } = req.params;
   
   // __dirname is backend/src/controllers

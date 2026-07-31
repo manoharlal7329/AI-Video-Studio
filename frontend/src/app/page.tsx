@@ -25,7 +25,8 @@ export default function Home() {
     setJobId(null);
 
     try {
-      const response = await fetch("http://localhost:5000/api/videos/generate-video", {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+      const response = await fetch(`${apiUrl}/api/videos/generate-video`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, script, duration, language })
@@ -52,7 +53,8 @@ export default function Home() {
     if (jobId && loading) {
       intervalId = setInterval(async () => {
         try {
-          const res = await fetch(`http://localhost:5000/api/videos/status/${jobId}`);
+          const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+          const res = await fetch(`${apiUrl}/api/videos/status/${jobId}`);
           const data = await res.json();
           
           if (data.success && data.job) {
@@ -230,7 +232,7 @@ export default function Home() {
 
             <div className="mt-8 pt-6 border-t border-slate-100">
               <a 
-                href={videoUrl || "#"}
+                href={videoUrl ? `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}${videoUrl}` : "#"}
                 download={videoUrl ? "generated-video.mp4" : undefined}
                 target="_blank"
                 rel="noreferrer"

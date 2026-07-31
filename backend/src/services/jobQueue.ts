@@ -121,7 +121,7 @@ class JobQueue extends EventEmitter {
       
       console.log(`[JobQueue Success] Pipeline finished successfully! File saved to: ${finalOutputPath}`);
       
-      this.updateJobProgress(jobId, 100, 'Video completed', 'completed', `http://localhost:5000/api/videos/download/${jobId}`);
+      this.updateJobProgress(jobId, 100, 'Video completed', 'completed', `/api/videos/download/${jobId}`);
       
     } catch (error: any) {
       console.error(error);
