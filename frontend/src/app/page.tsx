@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Film, Play, Download, Loader2, Image as ImageIcon, Mic, Video, CheckCircle2, AlertCircle, Settings2, Sparkles, Smartphone, MonitorPlay, Type, FileText } from "lucide-react";
+import { Film, Play, Download, Loader2, Image as ImageIcon, Mic, Video, CheckCircle2, AlertCircle, Settings2, Sparkles, Smartphone, MonitorPlay, FileText } from "lucide-react";
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
@@ -60,9 +60,9 @@ export default function Home() {
 
       setJobId(data.jobId);
       setStatus("Job queued. Waiting for pipeline to start...");
-    } catch (err: any) {
+    } catch (err) {
       console.error(err);
-      setError(err.message || "Network Error");
+      setError(err instanceof Error ? err.message : "Network Error");
       setLoading(false);
       setStatus("Failed");
     }
@@ -161,7 +161,7 @@ export default function Home() {
                   <label className="text-sm font-medium text-slate-300">Quality</label>
                   <select 
                     value={quality} 
-                    onChange={(e) => setQuality(e.target.value as any)}
+                    onChange={(e) => setQuality(e.target.value as "720p" | "1080p")}
                     className="w-full flex h-11 rounded-xl border border-white/10 bg-black/20 px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all appearance-none"
                   >
                     <option value="720p">Standard (720p)</option>
@@ -201,7 +201,7 @@ export default function Home() {
                   <label className="text-sm font-medium text-slate-300">Voice</label>
                   <select 
                     value={voice}
-                    onChange={(e) => setVoice(e.target.value as any)}
+                    onChange={(e) => setVoice(e.target.value as "male" | "female" | "custom")}
                     className="w-full flex h-11 rounded-xl border border-white/10 bg-black/20 px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all appearance-none"
                   >
                     <option value="male">Male (AI)</option>

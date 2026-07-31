@@ -11,8 +11,18 @@ const path_1 = __importDefault(require("path"));
 if (ffmpeg_static_1.default) {
     fluent_ffmpeg_1.default.setFfmpegPath(ffmpeg_static_1.default);
 }
-const stitchScene = (imagePath, audioPath, srtPath, outputPath, durationSeconds) => {
+const stitchScene = (imagePath, audioPath, srtPath, outputPath, durationSeconds, format = "9:16", quality = "1080p") => {
     return new Promise((resolve, reject) => {
+        let width = 720;
+        let height = 1280;
+        if (format === "16:9") {
+            width = quality === "1080p" ? 1920 : 1280;
+            height = quality === "1080p" ? 1080 : 720;
+        }
+        else {
+            width = quality === "1080p" ? 1080 : 720;
+            height = quality === "1080p" ? 1920 : 1280;
+        }
         const frames = durationSeconds * 25; // 25 fps
         // Windows paths in FFmpeg filters need special escaping for colons and backslashes
         // e.g. C:\path\to\file.srt -> C\\:/path/to/file.srt
@@ -23,7 +33,7 @@ const stitchScene = (imagePath, audioPath, srtPath, outputPath, durationSeconds)
             .input(audioPath)
             // Apply zoompan and subtitles in a complex filter graph
             .complexFilter([
-            `[0:v]zoompan=z='min(zoom+0.0015,1.5)':d=${frames}:s=1280x720[v_zoomed]`,
+            `[0:v]zoompan=z='min(zoom+0.0015,1.5)':d=${frames}:s=${width}x${height}[v_zoomed]`,
             `[v_zoomed]subtitles=${escapedSrtPath}[v_final]`
         ])
             .outputOptions([

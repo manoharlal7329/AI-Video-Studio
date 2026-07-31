@@ -40,15 +40,25 @@ exports.generateAudio = void 0;
 const googleTTS = __importStar(require("google-tts-api"));
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
-const generateAudio = async (text, language, jobId, sceneNumber) => {
+const generateAudio = async (text, language, jobId, sceneNumber, voice = 'male', voiceFile) => {
     const tempDir = path_1.default.join(__dirname, '../../temp', jobId);
     if (!fs_1.default.existsSync(tempDir)) {
         fs_1.default.mkdirSync(tempDir, { recursive: true });
     }
     const filePath = path_1.default.join(tempDir, `scene_${sceneNumber}.mp3`);
+    // Note: True voice cloning requires heavy AI. For now, we mock it by using a standard TTS.
+    if (voice === 'custom' && voiceFile) {
+        console.log(`[AudioService] Custom voice file uploaded at ${voiceFile}. Simulating voice cloning...`);
+    }
+    // Google TTS doesn't have strict gender controls via this API, but we can simulate different accents.
+    let langCode = language === 'hi' ? 'hi' : 'en';
+    if (language === 'en' && voice === 'female')
+        langCode = 'en-US';
+    if (language === 'en' && voice === 'male')
+        langCode = 'en-GB';
     try {
         const base64Audio = await googleTTS.getAudioBase64(text, {
-            lang: language === 'hi' ? 'hi' : 'en',
+            lang: langCode,
             slow: false,
             host: 'https://translate.google.com',
         });
