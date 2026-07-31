@@ -19,6 +19,11 @@ export interface VideoJob {
   currentTask: string;
   videoUrl?: string;
   error?: string;
+  inputType?: string;
+  format?: string;
+  quality?: string;
+  voice?: string;
+  voiceFile?: string;
 }
 
 class JobQueue extends EventEmitter {
@@ -75,7 +80,7 @@ class JobQueue extends EventEmitter {
     try {
       this.updateJobProgress(jobId, 10, 'Generating Script and Scenes (Gemini API)...');
       console.log(`[JobQueue Stage 1] Fetching AI Scenes from Gemini...`);
-      const scenes = await generateScenes(job.script, job.language, job.duration);
+      const scenes = await generateScenes(job.script, job.language, job.duration, job.inputType);
       
       if (!scenes || scenes.length === 0) throw new Error("No scenes generated from AI.");
       
@@ -96,11 +101,11 @@ class JobQueue extends EventEmitter {
         this.updateJobProgress(jobId, Math.floor(baseProgress), `Generating Image for Scene ${sceneNum}...`);
         
         console.log(`[JobQueue Stage 3] Generating Image via Pollinations AI. Prompt: "${scene.visual_description}"`);
-        const imagePath = await generateImage(scene.visual_description, jobId, sceneNum);
+        const imagePath = await generateImage(scene.visual_description, jobId, sceneNum, job.format, job.quality);
         
         this.updateJobProgress(jobId, Math.floor(baseProgress + 10), `Synthesizing Audio for Scene ${sceneNum}...`);
         console.log(`[JobQueue Stage 4] Generating TTS Audio via Google TTS. Text: "${scene.narration}"`);
-        const audioPath = await generateAudio(scene.narration, job.language, jobId, sceneNum);
+        const audioPath = await generateAudio(scene.narration, job.language, jobId, sceneNum, job.voice, job.voiceFile);
         
         this.updateJobProgress(jobId, Math.floor(baseProgress + 12), `Generating Subtitles for Scene ${sceneNum}...`);
         console.log(`[JobQueue Stage 4.5] Generating SRT Subtitles...`);
@@ -109,7 +114,7 @@ class JobQueue extends EventEmitter {
         this.updateJobProgress(jobId, Math.floor(baseProgress + 15), `Rendering Scene ${sceneNum}...`);
         console.log(`[JobQueue Stage 5] Stitching Image, Audio, and Subtitles via FFmpeg (Duration: ${scene.duration_seconds}s)...`);
         const sceneVideoPath = path.join(tempDir, `scene_${sceneNum}.mp4`);
-        await stitchScene(imagePath, audioPath, srtPath, sceneVideoPath, scene.duration_seconds);
+        await stitchScene(imagePath, audioPath, srtPath, sceneVideoPath, scene.duration_seconds, job.format, job.quality);
         
         sceneVideoPaths.push(sceneVideoPath);
       }

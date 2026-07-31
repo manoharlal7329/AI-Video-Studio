@@ -1,0 +1,60 @@
+{
+  "name": "Social Media Upload Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "video-generated",
+        "options": {}
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        250,
+        300
+      ],
+      "webhookId": "ai-video-studio-webhook"
+    },
+    {
+      "parameters": {
+        "title": "={{$json.title}}",
+        "description": "={{$json.script}}",
+        "video": "={{$json.videoUrl}}",
+        "categoryId": "22",
+        "privacyStatus": "private"
+      },
+      "name": "YouTube",
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        500,
+        300
+      ],
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "1",
+          "name": "YouTube account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "YouTube",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "staticData": null,
+  "meta": {
+    "templateId": "1"
+  }
+}
