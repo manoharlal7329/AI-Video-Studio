@@ -17,8 +17,6 @@ export const generateAudio = async (text: string, language: string, jobId: strin
 
   // Google TTS doesn't have strict gender controls via this API, but we can simulate different accents.
   let langCode = language === 'hi' ? 'hi' : 'en';
-  if (language === 'en' && voice === 'female') langCode = 'en-US';
-  if (language === 'en' && voice === 'male') langCode = 'en-GB';
 
   try {
     const base64Audio = await googleTTS.getAudioBase64(text, {
