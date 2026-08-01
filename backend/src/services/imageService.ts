@@ -18,7 +18,12 @@ export const generateImage = async (prompt: string, jobId: string, sceneNumber: 
 
   const url = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=${width}&height=${height}&nologo=true&seed=${Math.floor(Math.random()*10000)}`;
   
-  const response = await fetch(url);
+  const response = await fetch(url, {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      'Accept': 'image/jpeg,image/webp,*/*'
+    }
+  });
   if (!response.ok) throw new Error("Failed to fetch image from Pollinations AI");
   
   const buffer = await response.arrayBuffer();
