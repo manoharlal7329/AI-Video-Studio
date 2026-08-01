@@ -3,7 +3,7 @@ services:
     name: ai-video-studio
     env: node
     rootDir: .
-    buildCommand: npm install && npm install --prefix backend && npm install --prefix frontend && npm run build
+    buildCommand: npm install --include=dev && npm install --prefix backend --include=dev && npm install --prefix frontend --include=dev && npm run build
     startCommand: npm start
     envVars:
       - key: BACKEND_PORT
