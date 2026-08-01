@@ -37,6 +37,8 @@ export const stitchScene = (imagePath: string, audioPath: string, srtPath: strin
         '-map [v_final]',
         '-map 1:a',
         '-c:v libx264',
+        '-preset ultrafast', // Use ultrafast preset to reduce memory usage and speed up rendering
+        '-threads 1',        // Limit to 1 thread to avoid Out-Of-Memory (OOM) on free cloud tiers
         '-c:a aac',
         '-b:a 192k',
         '-pix_fmt yuv420p',
