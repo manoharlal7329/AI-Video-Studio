@@ -1,25 +1,14 @@
 services:
   - type: web
-    name: ai-video-studio-backend
+    name: ai-video-studio
     env: node
-    rootDir: backend
-    buildCommand: npm install && npm run build
+    rootDir: .
+    buildCommand: npm install && npm install --prefix backend && npm install --prefix frontend && npm run build
     startCommand: npm start
     envVars:
-      - key: PORT
+      - key: BACKEND_PORT
         value: "5000"
+      - key: NEXT_PUBLIC_API_URL
+        value: "http://localhost:5000"
       - key: GEMINI_API_KEY
         sync: false
-
-  - type: web
-    name: ai-video-studio-frontend
-    env: node
-    rootDir: frontend
-    buildCommand: npm install && npm run build
-    startCommand: npm start
-    envVars:
-      - key: NEXT_PUBLIC_API_URL
-        fromService:
-          name: ai-video-studio-backend
-          type: web
-          envVarKey: RENDER_EXTERNAL_URL
