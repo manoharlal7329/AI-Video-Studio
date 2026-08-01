@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
   const resolvedParams = await params;
   const pathParts = resolvedParams.path.join("/");
-  const backendUrl = process.env.NEXT_PUBLIC_API_URL || process.env.BACKEND_INTERNAL_URL || "http://127.0.0.1:5000";
+  const backendUrl = process.env.BACKEND_INTERNAL_URL || "http://127.0.0.1:5000";
 
   if (!backendUrl) {
     return NextResponse.json({ success: false, message: "Backend URL is not configured." }, { status: 500 });
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 export async function GET(request: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
   const resolvedParams = await params;
   const pathParts = resolvedParams.path.join("/");
-  const backendUrl = process.env.NEXT_PUBLIC_API_URL || process.env.BACKEND_INTERNAL_URL || "http://127.0.0.1:5000";
+  const backendUrl = process.env.BACKEND_INTERNAL_URL || "http://127.0.0.1:5000";
 
   if (!backendUrl) {
     return NextResponse.json({ success: false, message: "Backend URL is not configured." }, { status: 500 });
