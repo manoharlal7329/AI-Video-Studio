@@ -7,8 +7,14 @@ const express_1 = require("express");
 const videoController_1 = require("../controllers/videoController");
 const statusController_1 = require("../controllers/statusController");
 const downloadController_1 = require("../controllers/downloadController");
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 const multer_1 = __importDefault(require("multer"));
-const upload = (0, multer_1.default)({ dest: 'temp/uploads/' });
+const uploadDir = path_1.default.join(process.cwd(), 'temp', 'uploads');
+if (!fs_1.default.existsSync(uploadDir)) {
+    fs_1.default.mkdirSync(uploadDir, { recursive: true });
+}
+const upload = (0, multer_1.default)({ dest: uploadDir });
 const router = (0, express_1.Router)();
 router.post('/generate-video', upload.single('voiceFile'), videoController_1.generateVideo);
 router.get('/status/:jobId', statusController_1.getJobStatus);
