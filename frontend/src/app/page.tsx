@@ -32,8 +32,6 @@ export default function Home() {
     setJobId(null);
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-      
       const formData = new FormData();
       formData.append("title", title);
       formData.append("script", script);
@@ -48,7 +46,7 @@ export default function Home() {
         formData.append("voiceFile", voiceFile);
       }
 
-      const response = await fetch(`${apiUrl}/api/videos/generate-video`, {
+      const response = await fetch(`/api/videos/generate-video`, {
         method: "POST",
         body: formData // Using FormData now to support file upload
       });
@@ -74,8 +72,7 @@ export default function Home() {
     if (jobId && loading) {
       intervalId = setInterval(async () => {
         try {
-          const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-          const res = await fetch(`${apiUrl}/api/videos/status/${jobId}`);
+          const res = await fetch(`/api/videos/status/${jobId}`);
           const data = await res.json();
           
           if (data.success && data.job) {
@@ -325,7 +322,7 @@ export default function Home() {
 
             <div className="mt-auto pt-8">
               <a 
-                href={videoUrl ? `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}${videoUrl}` : "#"}
+                href={videoUrl || "#"}
                 download={videoUrl ? "generated-video.mp4" : undefined}
                 target="_blank"
                 rel="noreferrer"
