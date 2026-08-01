@@ -23,7 +23,11 @@
     "url": "https://github.com/manoharlal7329/AI-Video-Studio/issues"
   },
   "homepage": "https://github.com/manoharlal7329/AI-Video-Studio#readme",
-  "devDependencies": {
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "dependencies": {
     "concurrently": "^10.0.4"
   }
 }
