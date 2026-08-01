@@ -3,6 +3,7 @@ import path from "path";
 
 const nextConfig: NextConfig = {
   outputFileTracingRoot: path.join(__dirname, "../"),
+  allowedDevOrigins: ['192.168.1.48'],
 };
 
 export default nextConfig;
