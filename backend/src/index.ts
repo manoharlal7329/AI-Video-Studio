@@ -21,6 +21,16 @@ app.get('/health', (req, res) => {
 // Video APIs
 app.use('/api/videos', videoRoutes);
 
+// Global Error Handler
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  console.error('Unhandled Server Error:', err);
+  res.status(500).json({
+    success: false,
+    message: err.message || 'Internal Server Error',
+    error: err.toString()
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Backend server is running on http://localhost:${PORT}`);
 });
